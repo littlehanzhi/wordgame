@@ -9,7 +9,7 @@ var http = require('http');
 var host = "localhost";
 var port = 3030;
 var cloudant = {
-		 		 url : "<url>" // TODO: Update		 		 
+		 		 url : "https://ac65f669-ac9a-4932-8dfa-0fee17b9c9b8-bluemix:a32ee959881590e1c63c83906516223d0e4a77983bb9edc841e821db66d24540@ac65f669-ac9a-4932-8dfa-0fee17b9c9b8-bluemix.cloudant.com"	 		 
 };
 if (process.env.hasOwnProperty("VCAP_SERVICES")) {
   // Running on Bluemix. Parse out the port and host that we've been assigned.
