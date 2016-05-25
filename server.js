@@ -8,6 +8,20 @@ var http = require('http');
 
 var host = "localhost";
 var port = 3030;
+var cloudant = {
+		 		 url : "<url>" // TODO: Update		 		 
+};
+if (process.env.hasOwnProperty("VCAP_SERVICES")) {
+  // Running on Bluemix. Parse out the port and host that we've been assigned.
+  var env = JSON.parse(process.env.VCAP_SERVICES);
+  var host = process.env.VCAP_APP_HOST;
+  var port = process.env.VCAP_APP_PORT;
+
+  // Also parse out Cloudant settings.
+  cloudant = env['cloudantNoSQLDB'][0].credentials;  
+}
+var nano = require('nano')(cloudant.url);
+var db = nano.db.use('guess_the_word_hiscores');
 
 if (process.env.hasOwnProperty("VCAP_SERVICES")) {
   // Running on Bluemix. Parse out the port and host that we've been assigned.
