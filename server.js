@@ -23,6 +23,30 @@ if (process.env.hasOwnProperty("VCAP_SERVICES")) {
 var nano = require('nano')(cloudant.url);
 var db = nano.db.use('guess_the_word_hiscores');
 
+app.get('/hiscores', function(request, response) {
+  db.view('top_scores', 'top_scores_index', function(err, body) {
+  if (!err) {
+    var scores = [];
+      body.rows.forEach(function(doc) {
+        scores.push(doc.value);		      
+      });
+      response.send(JSON.stringify(scores));
+    }
+  });
+});
+
+app.get('/save_score', function(request, response) {
+  var name = request.query.name;
+  var score = request.query.score;
+
+  var scoreRecord = { 'name': name, 'score' : parseInt(score), 'date': new Date() };
+  db.insert(scoreRecord, function(err, body, header) {
+    if (!err) {       
+      response.send('Successfully added one score to the DB');
+    }
+  });
+});
+
 if (process.env.hasOwnProperty("VCAP_SERVICES")) {
   // Running on Bluemix. Parse out the port and host that we've been assigned.
   var env = JSON.parse(process.env.VCAP_SERVICES);
